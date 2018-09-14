@@ -8,11 +8,11 @@ OBJ_DIR = ./obj
 CC_SRC = ../c_src/palindrome.c
 CC_OBJ = $(OBJ_DIR)/palindrome.o
 
-#CXX_SRC = ../cxx_src/
-#CXX_OBJ = $(OBJ_DIR)/
+CXX_SRC = ../cxx_src/possible_combine.cc
+CXX_OBJ = $(OBJ_DIR)/possible_combine.o
 
-UT_SRC = ut_palindrome.cc
-UT_OBJ = $(OBJ_DIR)/ut_palindrome.o
+UT_SRC = gtest_all.cc
+UT_OBJ = $(OBJ_DIR)/gtest_all.o
 
 UT_RESULT = ut_algorithm
 
@@ -23,7 +23,7 @@ prepare:
 	@if [ ! -d $(OBJ_DIR)  ];then mkdir $(OBJ_DIR); fi
 
 
-$(UT_RESULT) : $(UT_OBJ) $(CC_OBJ) #$(CXX_SRC)
+$(UT_RESULT) : $(CC_OBJ) $(CXX_OBJ) $(UT_OBJ) 
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 #c_src
@@ -36,7 +36,7 @@ $(CXX_OBJ) : $(CXX_SRC)
 
 #ut
 $(UT_OBJ) : $(UT_SRC)
-	$(CXX) -c $(UT_SRC) -o $(UT_OBJ)
+	$(CXX) -c $< -o $@
 
 .PHONY : run
 run :

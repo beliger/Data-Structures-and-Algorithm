@@ -9,8 +9,6 @@ extern int is_palindrome(char *str, int n);
 }
 #endif
 
-using namespace testing;
-
 TEST(AlgorithmTest, PalindromeTest)
 {
 	EXPECT_TRUE(is_palindrome("", 0));
