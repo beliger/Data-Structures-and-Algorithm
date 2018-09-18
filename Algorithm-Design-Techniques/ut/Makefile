@@ -2,17 +2,17 @@ CXX = g++
 CC = gcc
 
 LDFLAGS  = -lgmock -lgmock_main -lgtest -lgtest_main -lpthread 
+CXXFLAGS = -std=c++11
 
 OBJ_DIR = ./obj
 
-CC_SRC = ../c_src/palindrome.c
 CC_OBJ = $(OBJ_DIR)/palindrome.o
+		
+CXX_OBJ = $(OBJ_DIR)/possible_combine.o \
+			$(OBJ_DIR)/cxx_palindrome.o
 
-CXX_SRC = ../cxx_src/possible_combine.cc
-CXX_OBJ = $(OBJ_DIR)/possible_combine.o
-
-UT_SRC = gtest_all.cc
-UT_OBJ = $(OBJ_DIR)/gtest_all.o
+UT_OBJ = $(OBJ_DIR)/ut_palindrome.o \
+			$(OBJ_DIR)/ut_possible_combine.o
 
 UT_RESULT = ut_algorithm
 
@@ -23,20 +23,20 @@ prepare:
 	@if [ ! -d $(OBJ_DIR)  ];then mkdir $(OBJ_DIR); fi
 
 
-$(UT_RESULT) : $(CC_OBJ) $(CXX_OBJ) $(UT_OBJ) 
-	$(CXX) -o $@ $^ $(LDFLAGS)
+$(UT_RESULT) : $(CC_OBJ) $(CXX_OBJ) $(UT_OBJ)  
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 #c_src
-$(CC_OBJ) : $(CC_SRC)
-	$(CC) -c $(CC_SRC) -o $(CC_OBJ)
+$(OBJ_DIR)/%.o : ../c_src/%.c
+	$(CC) -c $< -o $@
 
 #cxx_src
-$(CXX_OBJ) : $(CXX_SRC)
-	$(CXX) -c $(CXX_SRC) -o $(CXX_OBJ)
+$(OBJ_DIR)/%.o : ../cxx_src/%.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 #ut
-$(UT_OBJ) : $(UT_SRC)
-	$(CXX) -c $< -o $@
+$(OBJ_DIR)/%.o : %.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY : run
 run :
